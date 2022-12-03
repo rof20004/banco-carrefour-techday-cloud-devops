@@ -7,7 +7,6 @@ import (
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/google/uuid"
 )
 
 var (
@@ -36,9 +35,13 @@ func initializeDatabase() {
 }
 
 func saveComment(comment *CreateCommentRequest) error {
-	comment.Id = uuid.NewString()
+	result, err := dbConn.Exec("INSERT INTO mensagens(id, name, email, comment) VALUES(?, ?, ?, ?)", comment.Id, comment.Name, comment.Email, comment.Comment)
+	if err != nil {
+		return err
+	}
 
-	if _, err := dbConn.Exec("INSERT INTO mensagens(id, name, email, comment) VALUES(?, ?, ?, ?)", comment.Id, comment.Name, comment.Email, comment.Comment); err != nil {
+	comment.Id, err = result.LastInsertId()
+	if err != nil {
 		return err
 	}
 
