@@ -1,15 +1,37 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/google/uuid"
 )
 
 type CreateCommentRequest struct {
+	Id      string `json:"id"`
 	Name    string `json:"name"`
 	Email   string `json:"email"`
 	Comment string `json:"comment"`
+}
+
+var (
+	db  *sql.DB
+	err error
+)
+
+func createDbConnection() (*sql.DB, error) {
+	db, err = sql.Open("", "")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	if err = db.Ping(); err != nil {
+		return db, err
+	}
+
+	return db, err
 }
 
 func main() {
@@ -40,7 +62,19 @@ func createComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := saveComment(&payload); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	responseData, err := json.Marshal(&payload)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
+	w.Write(responseData)
 }
 
 func enableCors(w *http.ResponseWriter) {
@@ -51,4 +85,19 @@ func enableCors(w *http.ResponseWriter) {
 
 func closeRequestBody(r *http.Request) {
 	_ = r.Body.Close()
+}
+
+func saveComment(comment *CreateCommentRequest) error {
+	db, err := createDbConnection()
+	if err != nil {
+		return err
+	}
+
+	comment.Id = uuid.NewString()
+
+	if _, err := db.Exec("INSERT INTO mensagens(id, name, email, comment) VALUES(?, ?, ?, ?)", comment.Id, comment.Name, comment.Email, comment.Comment); err != nil {
+		return err
+	}
+
+	return nil
 }
