@@ -21,7 +21,7 @@ var (
 )
 
 func initializeDatabase() {
-	connString := fmt.Sprintf("%s:%s@%s:%s/%s", dbUser, dbPass, dbHost, dbPort, dbName)
+	connString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
 
 	db, err := sql.Open(dbDriver, connString)
 	if err != nil {
