@@ -3,9 +3,12 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
 )
 
@@ -17,17 +20,23 @@ type CreateCommentRequest struct {
 }
 
 var (
-	db  *sql.DB
-	err error
+	dbDriver = "mysql"
+	dbHost   = os.Getenv("DB_HOST")
+	dbPort   = os.Getenv("DB_PORT")
+	dbUser   = os.Getenv("DB_USER")
+	dbPass   = os.Getenv("DB_PASS")
+	dbName   = os.Getenv("DB_NAME")
 )
 
 func createDbConnection() (*sql.DB, error) {
-	db, err = sql.Open("", "")
+	connString := fmt.Sprintf("%s:%s@%s:%s/%s", dbUser, dbPass, dbHost, dbPort, dbName)
+
+	db, err := sql.Open(dbDriver, connString)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	if err = db.Ping(); err != nil {
+	if err := db.Ping(); err != nil {
 		return db, err
 	}
 
