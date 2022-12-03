@@ -1,19 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: goserver
+  name: backend
+  namespace: carrefour
+  labels:
+    name: backend
 spec:
-  replicas: 10
+  replicas: 1
   selector:
     matchLabels:
-      app: goserver
+      app: backend
   template:
     metadata:
       labels:
-        app: goserver
+        app: backend
     spec:
       containers:
-      - name: goserver
-        image: rof20004/goserver:latest
-        ports:
-        - containerPort: 8080
+        - name: backend
+          image: rof20004/carrefour-backend:latest
+          ports:
+            - containerPort: 8080
