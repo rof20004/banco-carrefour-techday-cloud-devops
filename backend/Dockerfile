@@ -19,12 +19,6 @@ COPY process.sh process.sh
 
 RUN chmod +x process.sh
 
-ENV DB_HOST=172.17.0.3
-ENV DB_PORT=3306
-ENV DB_USER=root
-ENV DB_PASS=root
-ENV DB_NAME=carrefour
-
 EXPOSE 80
 
 CMD ./process.sh
