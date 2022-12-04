@@ -15,10 +15,10 @@ FROM nginx:stable-alpine
 
 COPY --from=builder /app/backend backend
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY process.sh process.sh
+COPY init.sh init.sh
 
-RUN chmod +x process.sh
+RUN chmod +x init.sh
 
 EXPOSE 80
 
-CMD ./process.sh
+CMD ./init.sh
