@@ -9,16 +9,22 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -ldflags="-s -w" -o backend *.go
+RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o backend *.go
 
 FROM nginx:stable-alpine
 
 COPY --from=builder /app/backend backend
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY process.sh process.sh
 
-RUN chmod +x backend
-RUN nohup ./backend > backend.log 2>&1 &
+RUN chmod +x process.sh
+
+ENV DB_HOST=172.17.0.3
+ENV DB_PORT=3306
+ENV DB_USER=root
+ENV DB_PASS=root
+ENV DB_NAME=carrefour
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ./process.sh
