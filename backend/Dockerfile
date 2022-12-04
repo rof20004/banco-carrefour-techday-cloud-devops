@@ -9,7 +9,7 @@ RUN go mod download
 
 COPY . .
 
-RUN GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o backend main.go
+RUN GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o backend *.go
 
 FROM nginx:stable-alpine
 
