@@ -35,7 +35,7 @@ func initializeDatabase() {
 }
 
 func saveComment(comment *CreateCommentRequest) error {
-	result, err := dbConn.Exec("INSERT INTO mensagens(name, email, comment) VALUES(?, ?, ?)", comment.Name, comment.Email, comment.Comment)
+	result, err := dbConn.Exec("INSERT INTO mensagens(nome, email, comentario) VALUES(?, ?, ?)", comment.Name, comment.Email, comment.Comment)
 	if err != nil {
 		return err
 	}

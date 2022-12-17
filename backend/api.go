@@ -8,9 +8,9 @@ import (
 
 type CreateCommentRequest struct {
 	Id      int64  `json:"id"`
-	Name    string `json:"name"`
+	Name    string `json:"nome"`
 	Email   string `json:"email"`
-	Comment string `json:"comment"`
+	Comment string `json:"comentario"`
 }
 
 func initializeRestfulServer() {

@@ -20,3 +20,14 @@ spec:
           image: rof20004/carrefour-backend:latest
           ports:
             - containerPort: 8080
+          env:
+            - name: DB_HOST
+              value: mysql-service
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_USER
+              value: root
+            - name: DB_PASS
+              value: root
+            - name: DB_NAME
+              value: techday
