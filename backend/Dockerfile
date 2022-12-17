@@ -20,17 +20,3 @@ COPY --from=builder /app/backend backend
 EXPOSE 8080
 
 CMD ["./backend"]
-
-# Build antigo com o uso do Nginx para expôr a api em Go
-
-#FROM nginx:stable-alpine
-
-#COPY --from=builder /app/backend backend
-#COPY nginx.conf /etc/nginx/conf.d/default.conf
-#COPY init.sh init.sh
-
-#RUN chmod +x init.sh
-
-#EXPOSE 80
-
-#CMD ./init.sh
